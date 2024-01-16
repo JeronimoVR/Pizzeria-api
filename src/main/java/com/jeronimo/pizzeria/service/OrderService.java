@@ -3,8 +3,10 @@ package com.jeronimo.pizzeria.service;
 import com.jeronimo.pizzeria.persitence.entity.OrderEntity;
 import com.jeronimo.pizzeria.persitence.projection.OrderSummary;
 import com.jeronimo.pizzeria.persitence.repository.OrderRepository;
+import com.jeronimo.pizzeria.service.dto.RandomOrderDto;
 import org.hibernate.query.Order;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,28 +26,33 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public List<OrderEntity> getAll(){
+    public List<OrderEntity> getAll() {
         List<OrderEntity> orders = this.orderRepository.findAll();
         orders.forEach(order -> System.out.println(order.getCustomer().getName()));
         return orders;
     }
 
-    public List<OrderEntity> getTodayOrders(){
-        LocalDateTime today = LocalDate.now().atTime(0,0);
+    public List<OrderEntity> getTodayOrders() {
+        LocalDateTime today = LocalDate.now().atTime(0, 0);
         return this.orderRepository.findAllByDateAfter(today);
     }
 
-    public List<OrderEntity> getOutsideOrders(){
-        List<String> methods= Arrays.asList(DELIVERY,CARRYOUT);
+    public List<OrderEntity> getOutsideOrders() {
+        List<String> methods = Arrays.asList(DELIVERY, CARRYOUT);
         return this.orderRepository.findALlByMethodIn(methods);
     }
 
-    public List<OrderEntity> getCustomerOrders(String idCustomer){
+    public List<OrderEntity> getCustomerOrders(String idCustomer) {
         return this.orderRepository.findCustomerOrders(idCustomer);
     }
 
-    public OrderSummary getSummary(int orderId){
+    public OrderSummary getSummary(int orderId) {
         return this.orderRepository.findSummary((orderId));
+    }
+
+    @Transactional
+    public boolean saveRandomOrder(RandomOrderDto randomOrderDto) {
+        return this.orderRepository.saveRandomOrder(randomOrderDto.getIdCustomer(), randomOrderDto.getMethod());
     }
 
 }

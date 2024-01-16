@@ -1,16 +1,21 @@
 package com.jeronimo.pizzeria.persitence.entity;
 
+import com.jeronimo.pizzeria.persitence.audit.AuditPizzaListener;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.io.Serializable;
 
 @Entity
 @Table(name="pizza")
+@EntityListeners({AuditingEntityListener.class, AuditPizzaListener.class})
 @Getter
 @Setter
 @NoArgsConstructor
-public class PizzaEntity {
+public class PizzaEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +40,20 @@ public class PizzaEntity {
     @Column(columnDefinition = "TINYINT",nullable = false)
     private Boolean available;
 
+    @Override
+    public String toString() {
+        return "PizzaEntity{" +
+                "idPizza=" + idPizza +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", vegetarian=" + vegetarian +
+                ", vegan=" + vegan +
+                ", available=" + available +
+                '}';
+    }
+
+/*
     public Integer getIdPizza() {
         return idPizza;
     }
@@ -89,5 +108,5 @@ public class PizzaEntity {
 
     public void setAvailable(Boolean available) {
         this.available = available;
-    }
+    }*/
 }
