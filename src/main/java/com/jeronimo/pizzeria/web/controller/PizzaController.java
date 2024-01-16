@@ -3,6 +3,7 @@ package com.jeronimo.pizzeria.web.controller;
 import com.jeronimo.pizzeria.persitence.entity.OrderEntity;
 import com.jeronimo.pizzeria.persitence.entity.PizzaEntity;
 import com.jeronimo.pizzeria.service.PizzaService;
+import com.jeronimo.pizzeria.service.dto.UpdatePizzaPriceDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -82,6 +83,16 @@ public class PizzaController {
             this.pizzaService.delete(idPizza);
             return ResponseEntity.ok().build();
         }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping("/price")
+    public ResponseEntity<Void> updatePrice(@RequestBody UpdatePizzaPriceDto dto) {
+        if (this.pizzaService.exists(dto.getPizzaId())) {
+            this.pizzaService.updatePrice(dto);
+            return ResponseEntity.ok().build();
+        }
+        System.out.println("La pizza con ID " + dto.getPizzaId() + " no existe.");
         return ResponseEntity.badRequest().build();
     }
 }
