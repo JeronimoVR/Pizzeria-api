@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.List;
+
 @Entity
 @Table(name="user")
 @Getter
@@ -29,5 +31,8 @@ public class UserEntity {
 
     @Column(nullable = false,columnDefinition = "TINYINT")
     private Boolean disable;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<UserRoleEntity> roles;
 
 }
