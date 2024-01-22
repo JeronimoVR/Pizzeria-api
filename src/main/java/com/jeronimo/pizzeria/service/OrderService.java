@@ -5,6 +5,7 @@ import com.jeronimo.pizzeria.persitence.projection.OrderSummary;
 import com.jeronimo.pizzeria.persitence.repository.OrderRepository;
 import com.jeronimo.pizzeria.service.dto.RandomOrderDto;
 import org.hibernate.query.Order;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,7 @@ public class OrderService {
         return this.orderRepository.findALlByMethodIn(methods);
     }
 
+    @Secured("ROLE_ADMIN")
     public List<OrderEntity> getCustomerOrders(String idCustomer) {
         return this.orderRepository.findCustomerOrders(idCustomer);
     }
